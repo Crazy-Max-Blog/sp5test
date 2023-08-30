@@ -1,55 +1,19 @@
-var mic, recorder, soundFile;
-var state = 0;
+let mic;
 
-function setup() {
-  background(200);
-  // создаем объект p5.AudioIn:
+ function setup(){
+  let cnv = createCanvas(100, 100);
+  cnv.mousePressed(userStartAudio);
+  textAlign(CENTER);
   mic = new p5.AudioIn();
-
-  // начинаем обрабатывать аудиоданные, идущие через микрофон:
   mic.start();
-
-  // создаем объект p5.SoundRecorder для записи звука:
-  recorder = new p5.SoundRecorder();
-
-  // подключаем микрофон к объекту для записи звука:
-  recorder.setInput(mic);
-
-  // этот объект p5.SoundFile будет использоваться
-  // для проигрывания и сохранения записанного звука:
-  soundFile = new p5.SoundFile();
-
-  text('keyPress to record', 20, 20);
-   //  'нажмите на клавишу, чтобы начать запись'
 }
 
-function keyPressed() {
-  // убеждаемся, что пользователь включил микрофон: 
-  if (state === 0 && mic.enabled) {
+function draw(){
+  background(0);
+  fill(255);
+  text('tap to start', width/2, 20);
 
-    // записываем звук на наш объект p5.SoundFile:
-    recorder.record(soundFile);
-
-    background(255,0,0);
-    text('Recording!', 20, 20);
-     //  'Запись!'
-    state++;
-  }
-  else if (state === 1) {
-    background(0,255,0);
-
-    // останавливаем запись
-    // и отправляем результаты объекту «soundFile»:
-    recorder.stop();
-
-    text('Stopped', 20, 20);
-     //  'Запись остановлена'
-    state++;
-  }
-
-  else if (state === 2) {
-    soundFile.play(); // проигрываем результат!
-    save(soundFile, 'mySound.wav');
-    state++;
-  }
+  micLevel = mic.getLevel();
+  let y = height - micLevel * height;
+  ellipse(width/2, y, 10, 10);
 }
