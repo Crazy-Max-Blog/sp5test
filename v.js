@@ -1,56 +1,50 @@
-var mic, recorder, soundFile;
-var state = 0;
+var mic;
+var micOn;
+var recorder;
+var recording;
+var soundFile;
 
 function setup() {
-  background(200);
-  // создаем объект p5.AudioIn:
-  mic = new p5.AudioIn();
+  // uncomment this line to make the canvas the full size of the window
+   createCanvas(windowWidth, windowHeight);
+   // the volume is a number between 0 and 1
+   mic = new p5.AudioIn();
+   micOn = false;
+   //create a new recorder object
+   recorder = new p5.SoundRecorder();
+   //set the recorder to listen to the mic object
+   recorder.setInput(mic);
+   //create a new soundfile object to playback and save the recording
+   soundFile = new p5.SoundFile();
+}
 
-  // начинаем обрабатывать аудиоданные, идущие через микрофон:
-  mic.start();
+function draw() {
+  // draw stuff here
+  background(255);
+  soundFile.setVolume(1);
+  if (micOn) {
+    //it's a recording indicator :)
+    noStroke();
+    fill(255,0,0);
+    ellipse(50, 50, 25, 25);
 
-  // создаем объект p5.SoundRecorder для записи звука:
-  recorder = new p5.SoundRecorder();
+  }
 
-  // подключаем микрофон к объекту для записи звука:
-  recorder.setInput(mic);
+}
 
-  // этот объект p5.SoundFile будет использоваться
-  // для проигрывания и сохранения записанного звука:
-  soundFile = new p5.SoundFile();
-
-  text('keyPress to record', 20, 20);
-   //  'нажмите на клавишу, чтобы начать запись'
+function keyPressed() {
+    soundFile.play();
+    console.log("Playing Sound");
 }
 
 function mousePressed() {
-  // убеждаемся, что пользователь включил микрофон: 
-  if (state === 0 && mic.enabled) {
-
-    // записываем звук на наш объект p5.SoundFile:
+	micOn = !micOn;
+	if (micOn) {
+		mic.start();
     recorder.record(soundFile);
-
-    background(255,0,0);
-    text('Recording!', 20, 20);
-     //  'Запись!'
-    state++;
-  }
-  else if (state === 1) {
-    background(0,255,0);
-
-    // останавливаем запись
-    // и отправляем результаты объекту «soundFile»:
+	}
+	else {
+		mic.stop();
     recorder.stop();
-
-    text('Stopped', 20, 20);
-     //  'Запись остановлена'
-    state++;
-  }
-
-  else if (state === 2) {
-    soundFile.reload();
-    soundFile.play(); // проигрываем результат!
-    save(soundFile, 'mySound.wav');
-    state++;
-  }
+	}
 }
