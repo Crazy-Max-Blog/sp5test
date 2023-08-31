@@ -33,6 +33,7 @@ function draw() {
 }
 
 function keyPressed() {
+    soundFile.resume();
     soundFile.play();
     console.log("Playing Sound");
 }
