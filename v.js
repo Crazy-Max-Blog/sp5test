@@ -23,7 +23,7 @@ function setup() {
    //  'нажмите на клавишу, чтобы начать запись'
 }
 
-function keyPressed() {
+function mousePressed() {
   // убеждаемся, что пользователь включил микрофон: 
   if (state === 0 && mic.enabled) {
 
