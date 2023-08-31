@@ -16,6 +16,7 @@ function setup() {
    recorder.setInput(mic);
    //create a new soundfile object to playback and save the recording
    soundFile = new p5.SoundFile();
+   soundFile.resume();
 }
 
 function draw() {
